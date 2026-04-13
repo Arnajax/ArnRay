@@ -1,12 +1,14 @@
 const members = [
   {
     initials: "AB",
+    photo: "https://assets.deboekers.nl/assets/arn-braun/AN2A4951.jpg",
     name: "ARN BRAUNSCHWEIGER",
     role: "Builder & AI-strateeg",
-    bio: "Bouwt de oplossingen, kiest de tools, voert de implementatie uit. Co-founder House of Tones, bouwde zijn eigen AI-assistent Alfred op een VPS.",
+    bio: "Bouwt de oplossingen, kiest de tools, voert de implementatie uit. Co-founder House of Tones, bouwde zijn eigen AI-assistent op een VPS.",
   },
   {
     initials: "RK",
+    photo: null,
     name: "RAYMOND KAMP",
     role: "Interim professional Finance",
     bio: "Business navigator en controller. Zorgt dat wat wij bouwen ook financieel en operationeel aansluit bij jouw bedrijfsrealiteit.",
@@ -36,15 +38,23 @@ export function Team() {
             <div key={m.name} className={`reveal reveal-delay-${i + 2}`}>
               {/* Avatar */}
               <div
-                className="w-24 h-24 rounded-full flex items-center justify-center mb-6 border"
+                className="w-24 h-24 rounded-full mb-6 border overflow-hidden flex items-center justify-center"
                 style={{ borderColor: 'var(--accent)', backgroundColor: 'var(--bg-tertiary)' }}
               >
-                <span
-                  className="font-serif text-2xl"
-                  style={{ color: 'var(--accent)', fontStyle: 'italic' }}
-                >
-                  {m.initials}
-                </span>
+                {m.photo ? (
+                  <img
+                    src={m.photo}
+                    alt={m.name}
+                    className="w-full h-full object-cover object-top"
+                  />
+                ) : (
+                  <span
+                    className="font-serif text-2xl"
+                    style={{ color: 'var(--accent)', fontStyle: 'italic' }}
+                  >
+                    {m.initials}
+                  </span>
+                )}
               </div>
               <div className="font-mono text-xs tracking-widest mb-1" style={{ color: 'var(--accent)' }}>
                 {m.name}

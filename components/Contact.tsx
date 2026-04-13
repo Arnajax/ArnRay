@@ -28,7 +28,7 @@ export function Contact() {
         </h2>
         <div className="reveal reveal-delay-2">
           <a
-            href="mailto:info@arnray.nl"
+            href="mailto:Arn@quicknet.nl"
             className="btn-primary font-mono text-sm font-bold tracking-widest px-10 py-5 inline-flex items-center justify-center text-lg"
           >
             Stuur een mail →
@@ -40,11 +40,11 @@ export function Contact() {
           </span>
           <br />
           <a
-            href="tel:+31600000000"
+            href="tel:+31651447199"
             className="font-mono text-sm mt-1 inline-block hover-line"
             style={{ color: 'rgba(232, 238, 247, 0.6)' }}
           >
-            +31 6 00 00 00 00
+            +31 6 51 44 71 99
           </a>
         </div>
       </div>

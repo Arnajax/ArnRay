@@ -1,21 +1,68 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { DoubleWord } from "./DoubleWord";
 
 export function Hero() {
+  const orbRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
+  const targetPos = useRef({ x: 50, y: 50 });
+  const currentPos = useRef({ x: 50, y: 50 });
+
+  useEffect(() => {
+    const section = document.getElementById("hero");
+    if (!section) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = section.getBoundingClientRect();
+      targetPos.current = {
+        x: ((e.clientX - rect.left) / rect.width) * 100,
+        y: ((e.clientY - rect.top) / rect.height) * 100,
+      };
+    };
+
+    const animate = () => {
+      const lerp = 0.06;
+      currentPos.current.x += (targetPos.current.x - currentPos.current.x) * lerp;
+      currentPos.current.y += (targetPos.current.y - currentPos.current.y) * lerp;
+
+      if (orbRef.current) {
+        orbRef.current.style.left = `${currentPos.current.x}%`;
+        orbRef.current.style.top = `${currentPos.current.y}%`;
+      }
+
+      rafRef.current = requestAnimationFrame(animate);
+    };
+
+    section.addEventListener("mousemove", handleMouseMove);
+    rafRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      section.removeEventListener("mousemove", handleMouseMove);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
+
   return (
     <section
       id="hero"
       className="relative min-h-screen flex flex-col justify-center pt-16 grid-bg overflow-hidden"
     >
-      {/* Glow orbs */}
+      {/* Mouse-following glow orb */}
       <div
-        className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl pointer-events-none"
-        style={{ backgroundColor: 'rgba(0, 224, 255, 0.08)' }}
+        ref={orbRef}
+        className="absolute w-[600px] h-[600px] rounded-full blur-3xl pointer-events-none -translate-x-1/2 -translate-y-1/2"
+        style={{
+          backgroundColor: 'rgba(0, 224, 255, 0.07)',
+          left: '50%',
+          top: '50%',
+          willChange: 'left, top',
+        }}
       />
+      {/* Static secondary orb */}
       <div
-        className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full blur-3xl pointer-events-none"
-        style={{ backgroundColor: 'rgba(0, 224, 255, 0.05)' }}
+        className="absolute bottom-1/4 right-1/3 w-80 h-80 rounded-full blur-3xl pointer-events-none"
+        style={{ backgroundColor: 'rgba(0, 224, 255, 0.04)' }}
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 w-full">
@@ -27,23 +74,25 @@ export function Hero() {
           </span>
         </div>
 
-        {/* Headline */}
+        {/* Headline — Instrument Serif as primary display */}
         <div className="reveal reveal-delay-1">
           <h1
-            className="font-display font-black leading-[0.92] tracking-tight mb-8"
-            style={{ fontSize: 'clamp(3.5rem, 9vw, 9rem)' }}
+            className="font-serif leading-[0.92] mb-8"
+            style={{ fontSize: 'clamp(3.5rem, 9vw, 9rem)', fontWeight: 400 }}
           >
-            <span className="block" style={{ color: 'var(--text-primary)' }}>ARNRAY</span>
-            <span className="block">
-              <span className="font-serif italic" style={{ color: 'var(--text-primary)', fontStyle: 'italic' }}>voor echt</span>
+            <span className="block font-display font-black tracking-tight" style={{ color: 'var(--text-primary)' }}>
+              ARNRAY
+            </span>
+            <span className="block italic" style={{ color: 'var(--text-primary)', fontStyle: 'italic' }}>
+              voor echt
             </span>
             <span className="block">
-              <DoubleWord word="efficiënter" className="text-accent-glow" />
+              <DoubleWord word="efficiënter" className="text-accent-glow italic" />
             </span>
-            <span className="block font-display" style={{ color: 'var(--text-primary)' }}>
+            <span className="block font-display font-black tracking-tight" style={{ color: 'var(--text-primary)' }}>
               WERKEN
             </span>
-            <span className="block font-serif italic" style={{ color: 'var(--text-primary)', fontStyle: 'italic' }}>
+            <span className="block italic" style={{ color: 'var(--text-primary)', fontStyle: 'italic' }}>
               met AI
             </span>
           </h1>
